@@ -1,14 +1,40 @@
 package UNIRIO.TransportesPorMunicipio.Modelos;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
 
 public class Municipio {
 
-	@Getter @Setter
 	private String nome;
-	@Getter @Setter
 	private int codigoIBGE;
-	@Getter @Setter
-	private Poligono poligonos[];
+	private ArrayList<Poligono> poligonos = new ArrayList<Poligono>();
+	private BoundingBox boundingBox;
+	
+	public void addPoligono(Poligono poligono) {
+		this.poligonos.add(poligono);
+	}
+	public ArrayList<Poligono> getPoligonos() {
+		return poligonos;
+	}
+	public void setPoligonos(ArrayList<Poligono> poligonos) {
+		this.poligonos = poligonos;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public int getCodigoIBGE() {
+		return codigoIBGE;
+	}
+	public void setCodigoIBGE(int codigoIBGE) {
+		this.codigoIBGE = codigoIBGE;
+	}
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
+	}
+	
 }

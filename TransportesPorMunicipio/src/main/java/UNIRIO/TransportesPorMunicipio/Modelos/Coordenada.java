@@ -1,14 +1,32 @@
 package UNIRIO.TransportesPorMunicipio.Modelos;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class Coordenada {
 
-	@Getter @Setter
 	private double x;
-	@Getter @Setter
 	private double y;
+	
+	public Coordenada(){
+		
+	}
+	
+	public Coordenada(double x, double y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	public double getX() {
+		return x;
+	}
+	public void setX(double x) {
+		this.x = x;
+	}
+	public double getY() {
+		return y;
+	}
+	public void setY(double y) {
+		this.y = y;
+	}
+	
 
 	
 }
