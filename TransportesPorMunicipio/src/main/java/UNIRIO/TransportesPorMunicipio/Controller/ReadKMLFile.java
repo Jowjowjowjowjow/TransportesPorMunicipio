@@ -29,22 +29,21 @@ public class ReadKMLFile {
 	private static Municipio municipio = new Municipio();
 	private static ArrayList<Municipio> municipios = new ArrayList<Municipio>();
 	private static Poligono poligono = new Poligono();
+	private static List<String> lines = new ArrayList<String>();
 	static boolean placemarkTag = false;
 	
 	public static ArrayList<Municipio> carregaMunicipios() {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			List<String> lines = new ArrayList<String>();
+			
 			Path file2 = Paths.get("d:\\oi.txt");
 			DefaultHandler handler = new DefaultHandler() {
 
 				boolean nomeMunicipioTag = false;
 				boolean codigoMunicipioTag = false;
 				boolean coordenadasTag = false;
-				
 				StringBuffer valorDaTag;
-
 				/* Executada em toda abertura de tag */
 				public void startElement(String uri, String localName, String qName, Attributes attributes)
 						throws SAXException {
