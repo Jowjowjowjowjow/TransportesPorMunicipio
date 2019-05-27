@@ -10,7 +10,7 @@ import UNIRIO.TransportesPorMunicipio.Modelos.Poligono;
 public class Main {
 
 	public static void main(String[] args) {
-		ArrayList<Municipio> municipios = ReadKMLFile.carregaMunicipios();
+		ArrayList<Municipio> municipios = LeitorDeArquivosKML.carregaMunicipios();
 		
 		for(Municipio municipio: municipios) {
 			calculaBoundingBox(municipio);

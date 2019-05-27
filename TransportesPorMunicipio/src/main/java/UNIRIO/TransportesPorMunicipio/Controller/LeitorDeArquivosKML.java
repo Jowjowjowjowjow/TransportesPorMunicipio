@@ -24,105 +24,106 @@ import UNIRIO.TransportesPorMunicipio.Modelos.Coordenada;
 import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Modelos.Poligono;
 
-public class ReadKMLFile {
+public class LeitorDeArquivosKML {
 
 	private static Municipio municipio = new Municipio();
 	private static ArrayList<Municipio> municipios = new ArrayList<Municipio>();
 	private static Poligono poligono = new Poligono();
-	private static List<String> lines = new ArrayList<String>();
-	static boolean placemarkTag = false;
+	private static List<String> linhasArquivoResultante = new ArrayList<String>();
+	static boolean tagPlacemark = false;
 	
 	public static ArrayList<Municipio> carregaMunicipios() {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
-			Path file2 = Paths.get("d:\\oi.txt");
+			Path ArquivoDestino = Paths.get("d:\\Resultado.txt");
 			DefaultHandler handler = new DefaultHandler() {
 
-				boolean nomeMunicipioTag = false;
+				boolean tagNomeDoMunicipio = false;
 				boolean codigoMunicipioTag = false;
-				boolean coordenadasTag = false;
+				boolean tagCoordenadas = false;
 				StringBuffer valorDaTag;
-				/* Executada em toda abertura de tag */
-				public void startElement(String uri, String localName, String qName, Attributes attributes)
+				
+				/* Bloco executado em todo início de tag */
+				public void startElement(String uri, String localName, String nomeDaTag, Attributes attributes)
 						throws SAXException {
 					valorDaTag = new StringBuffer();
 					/*
 					 * Flag para a tag de SimpleData e diferenciar nome do município do código do
 					 * município
 					 */
-					if (qName.equalsIgnoreCase("SimpleData")) {
+					if (nomeDaTag.equalsIgnoreCase("SimpleData")) {
 						if (attributes.getValue("name").equalsIgnoreCase("NM_MUNICIP")) {
-							nomeMunicipioTag = true;
+							tagNomeDoMunicipio = true;
 						} else if (attributes.getValue("name").equalsIgnoreCase("CD_GEOCMU")) {
 							codigoMunicipioTag = true;
 						}
 					}
-					/* Flag para a tag de coordenadasTag */
-					if (qName.equalsIgnoreCase("coordinates")) {
-						coordenadasTag = true;
+					/* Flag para a tag de coordenada */
+					if (nomeDaTag.equalsIgnoreCase("coordinates")) {
+						tagCoordenadas = true;
 					}
 
-					if (qName.equalsIgnoreCase("Placemark")) {
+					/* Flag para a tag de placemark*/
+					if (nomeDaTag.equalsIgnoreCase("Placemark")) {
 						municipio = new Municipio();
-						placemarkTag = true;
+						tagPlacemark = true;
 					}
 
 				}
 
-				/* Responsável por pegar os valores da tag */
+				/* Responsável por pegar os valores da tag 
+				 * Utiliza StringBuffer e sua função append porque pode ser chamado diversas vezes
+				 * para um mesmo valor de tag caso o mesmo seja muito grande*/
 				public void characters(char ch[], int start, int length) throws SAXException {
 					valorDaTag.append(new String(ch, start, length).trim());
 				}
 
-				/* Executada no final de cada tag */
-				public void endElement(String uri, String localName, String qName) throws SAXException {
+				/* Bloco executado ao final de cada tag */
+				public void endElement(String uri, String localName, String nomeDaTag) throws SAXException {
 
-					if (nomeMunicipioTag) {
+					if (tagNomeDoMunicipio) {
 						// System.out.println("Nome do município: " + valorDaTag.toString());
-						lines.add("Nome do município: " + valorDaTag.toString());
+						linhasArquivoResultante.add("Nome do município: " + valorDaTag.toString());
 						municipio.setNome(valorDaTag.toString());
-						nomeMunicipioTag = false;
+						tagNomeDoMunicipio = false;
 					}
 
 					if (codigoMunicipioTag) {
 						// System.out.println("Codigo do município:" + valorDaTag.toString());
-						lines.add("Codigo do município: " + valorDaTag.toString());
+						linhasArquivoResultante.add("Codigo do município: " + valorDaTag.toString());
 						municipio.setCodigoIBGE(Integer.parseInt(valorDaTag.toString()));
 						codigoMunicipioTag = false;
 					}
 
-					if (coordenadasTag) {
-						String[] tempcoordenadasTag;
-						// System.out.println("coordenadasTag : ");
-						/* Dividindo a string de coordenadasTag utilizando ',0' como separador */
-						lines.add("Coordenadas: " + valorDaTag.toString());
-						tempcoordenadasTag = valorDaTag.toString().trim().split(",0");
-						for (int i = 0; i < tempcoordenadasTag.length; i++) {
+					if (tagCoordenadas) {
+						String[] listaDeCoordenadaXYs;
+						/* Transformando uma unica string com diversas coordenadas em um array de strings, cada um 
+						 * com uma coordenada diferente */
+						//linhasArquivoResultante.add("CoordenadaXYs: " + valorDaTag.toString());
+						listaDeCoordenadaXYs = valorDaTag.toString().trim().split(",0 ");
+						for (int i = 0; i < listaDeCoordenadaXYs.length; i++) {
 							/*
-							 * Dividindo novamente a string de coordenadasTag, dessa vez utilizando ',' como
-							 * separador
+							 * Dividindo uma única coordenada em X e Y, CoordenadaXY[0] = X e CoordenadaXY[1] = Y
 							 */
-							String[] tempcoordenadasTag2 = tempcoordenadasTag[i].trim().split(",");
-							// System.out.println("X: " +tempcoordenadasTag2[0] + " Y: "
-							// +tempcoordenadasTag2[1]);
-							lines.add("X: " + tempcoordenadasTag2[0] + " Y: "+ tempcoordenadasTag2[1]);
-							Coordenada coordenada = new Coordenada(Double.parseDouble(tempcoordenadasTag2[0]),
-									Double.parseDouble(tempcoordenadasTag2[1]));
+							String[] CoordenadaXY = listaDeCoordenadaXYs[i].trim().split(",");
+							linhasArquivoResultante.add("X: " + CoordenadaXY[0] + " Y: "+ CoordenadaXY[1]);
+							Coordenada coordenada = new Coordenada(Double.parseDouble(CoordenadaXY[0]),
+									Double.parseDouble(CoordenadaXY[1]));
 							poligono.addCoordenada(coordenada);
 						}
 						/*O fim de cada tag de coordenada também é o fim de um polígono */
 						municipio.addPoligono(poligono);
 						poligono = new Poligono();
-						coordenadasTag = false;	
+						tagCoordenadas = false;	
 					}
 					
-					if(placemarkTag) {
+					if(tagPlacemark) {
 						if (municipio != null) {
 							municipios.add(municipio);
 						}
-						placemarkTag = false;
+						tagPlacemark = false;
 					}
 				}
 			};
@@ -130,14 +131,14 @@ public class ReadKMLFile {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File file = new File("d://municipiosrj.kml");
+			 File kmlDeEntrada = new File("d://municipiosbr.kml");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
-			InputStream inputStream = new FileInputStream(file);
+			InputStream inputStream = new FileInputStream(kmlDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			InputSource is = new InputSource(reader);
 			is.setEncoding("UTF-8");
 			saxParser.parse(is, handler);
-			Files.write(file2, lines, Charset.forName("UTF-8"));
+			Files.write(ArquivoDestino, linhasArquivoResultante, Charset.forName("UTF-8"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
