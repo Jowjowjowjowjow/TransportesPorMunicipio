@@ -2,6 +2,7 @@ package UNIRIO.TransportesPorMunicipio.Controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -46,7 +47,7 @@ public class LeitorDeArquivosKML {
 				StringBuffer valorDaTag;
 				
 				/* Bloco executado em todo início de tag */
-				public void startElement(String uri, String localName, String nomeDaTag, Attributes attributes)
+				public void startElement(String uri, String localName, String nomeDaTag, Attributes attributos)
 						throws SAXException {
 					valorDaTag = new StringBuffer();
 					/*
@@ -54,9 +55,9 @@ public class LeitorDeArquivosKML {
 					 * município
 					 */
 					if (nomeDaTag.equalsIgnoreCase("SimpleData")) {
-						if (attributes.getValue("name").equalsIgnoreCase("NM_MUNICIP")) {
+						if (attributos.getValue("name").equalsIgnoreCase("NM_MUNICIP")) {
 							tagNomeDoMunicipio = true;
-						} else if (attributes.getValue("name").equalsIgnoreCase("CD_GEOCMU")) {
+						} else if (attributos.getValue("name").equalsIgnoreCase("CD_GEOCMU")) {
 							codigoMunicipioTag = true;
 						}
 					}
@@ -131,7 +132,7 @@ public class LeitorDeArquivosKML {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File kmlDeEntrada = new File("d://municipiosbr.kml");
+			 File kmlDeEntrada = new File("d://municipiossp.kml");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(kmlDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
@@ -144,6 +145,14 @@ public class LeitorDeArquivosKML {
 			e.printStackTrace();
 		}
 		return municipios;
+	}
+	public static void escreveArquivo(String destino, List<String> conteudo) {
+		Path ArquivoDestino = Paths.get(destino);
+		try {
+			Files.write(ArquivoDestino, conteudo, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

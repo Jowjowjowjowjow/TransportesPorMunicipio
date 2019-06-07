@@ -11,50 +11,52 @@ public class Main {
 
 	public static void main(String[] args) {
 		ArrayList<Municipio> municipios = LeitorDeArquivosKML.carregaMunicipios();
-		
+		ArrayList<String> conteudoArquivoBoundingBox = new ArrayList<String>();
 		for(Municipio municipio: municipios) {
 			calculaBoundingBox(municipio);
 			System.out.println("Nome: " + municipio.getNome());
+			conteudoArquivoBoundingBox.add("Nome: " + municipio.getNome());
 			System.out.println("Codigo: " + municipio.getCodigoIBGE());
+			conteudoArquivoBoundingBox.add("Codigo: " + municipio.getCodigoIBGE());
 			System.out.println("Quantidade de polígonos: " + municipio.getPoligonos().size());
+			conteudoArquivoBoundingBox.add("Quantidade de polígonos: " + municipio.getPoligonos().size());
 			System.out.println("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
-		}
-
-	}
-	
-	private static void calculaBoundingBox(Municipio municipio){
-		double maiorX = Double.NEGATIVE_INFINITY;
-		double menorX = Double.MAX_VALUE;
-		double maiorY = Double.NEGATIVE_INFINITY;
-		double menorY = Double.MAX_VALUE;
-		
-		for(Poligono poligono: municipio.getPoligonos()) {
-			for(Coordenada coordenada: poligono.getCoordenadas()) {
-				if(coordenada.getX() > maiorX) {
-					maiorX = coordenada.getX();
-				}
-				if(coordenada.getX() < menorX) {
-					menorX = coordenada.getX();
-				}
-				if(coordenada.getY() > maiorY) {
-					maiorY = coordenada.getY();
-				}
-				if(coordenada.getY() < menorY) {
-					menorY = coordenada.getY();
-				}
+			conteudoArquivoBoundingBox.add("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
+			
+			if(municipio.getNome().equalsIgnoreCase("Santos")) {
+				BaixaArquivoOSM.BaixaArquivo(municipio.getBoundingBox().getMenorLongitude(), municipio.getBoundingBox().getMenorLatitude(), municipio.getBoundingBox().getMaiorLongitude(), municipio.getBoundingBox().getMaiorLatitude());
 			}
 		}
 		
-		//Canto superior esquerdo
-		Coordenada x1 = new Coordenada(menorX, maiorY);
-		//Canto superior direito
-		Coordenada x2 = new Coordenada(maiorX, maiorY);
-		//Canto inferior esquerdo
-		Coordenada x3 = new Coordenada(menorX, menorY);
-		//Canto inferior direito
-		Coordenada x4 = new Coordenada(maiorX, menorY);
+		LeitorDeArquivosKML.escreveArquivo("d:\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
+
 		
-		BoundingBox boundingBox = new BoundingBox(x1,x2,x3,x4);
+		
+	}
+	
+	private static void calculaBoundingBox(Municipio municipio){
+		double maiorLatitude = Double.NEGATIVE_INFINITY;
+		double menorLatitude = Double.MAX_VALUE;
+		double maiorLongitude = Double.NEGATIVE_INFINITY;
+		double menorLongitude = Double.MAX_VALUE;
+		
+		for(Poligono poligono: municipio.getPoligonos()) {
+			for(Coordenada coordenada: poligono.getCoordenadas()) {
+				if(coordenada.getY() > maiorLatitude) {
+					maiorLatitude = coordenada.getY();
+				}
+				if(coordenada.getY() < menorLatitude) {
+					menorLatitude = coordenada.getY();
+				}
+				if(coordenada.getX() > maiorLongitude) {
+					maiorLongitude = coordenada.getX();
+				}
+				if(coordenada.getX() < menorLongitude) {
+					menorLongitude = coordenada.getX();
+				}
+			}
+		}
+		BoundingBox boundingBox = new BoundingBox(menorLatitude,maiorLatitude,menorLongitude,maiorLongitude);
 		
 		municipio.setBoundingBox(boundingBox);
 		
