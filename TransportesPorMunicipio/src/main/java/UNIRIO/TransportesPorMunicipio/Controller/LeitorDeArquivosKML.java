@@ -132,7 +132,7 @@ public class LeitorDeArquivosKML {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File kmlDeEntrada = new File("d://municipiossp.kml");
+			 File kmlDeEntrada = new File("d://municipiosrj.kml");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(kmlDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");

@@ -15,15 +15,14 @@ public class BaixaArquivoOSM {
 	2 = menor latitude
 	3 = maior longitude
 	4 = maior latitude*/
-	
-	//catch (FileNotFoundException e1)
+
 	public static void BaixaArquivo(double menorLongitude, double menorLatitude, double maiorLongitude,
 			double maiorLatitude) {
 
 		try {
         URL url = new URL("https://www.overpass-api.de/api/xapi_meta?*"
         + "[bbox="+menorLongitude+","+menorLatitude+","+maiorLongitude+","+maiorLatitude+"]");
-        System.out.println("URL: " + "https://www.overpass-api.de/api/xapi_meta?*"
+        System.out.println("URL: " + "https://www.overpass-api.de/api/xapi_meta?way"
                 + "[bbox="+menorLongitude+","+menorLatitude+","+maiorLongitude+","+maiorLatitude+"]");
         File file = new File("d://municipio.osm");
 

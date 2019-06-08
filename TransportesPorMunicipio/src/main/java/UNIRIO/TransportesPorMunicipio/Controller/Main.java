@@ -23,12 +23,15 @@ public class Main {
 			System.out.println("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
 			conteudoArquivoBoundingBox.add("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
 			
-			if(municipio.getNome().equalsIgnoreCase("Santos")) {
+			if(municipio.getNome().equalsIgnoreCase("Rio de Janeiro")) {
 				BaixaArquivoOSM.BaixaArquivo(municipio.getBoundingBox().getMenorLongitude(), municipio.getBoundingBox().getMenorLatitude(), municipio.getBoundingBox().getMaiorLongitude(), municipio.getBoundingBox().getMaiorLatitude());
 			}
+			
 		}
 		
 		LeitorDeArquivosKML.escreveArquivo("d:\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
+		
+		LeitorDeArquivosOSM.carregaLocais();
 
 		
 		
