@@ -37,7 +37,7 @@ public class ReadKMLFile {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
-			Path file2 = Paths.get("d:\\oi.txt");
+			Path file2 = Paths.get("C:\\xml\\oi.txt");
 			DefaultHandler handler = new DefaultHandler() {
 
 				boolean nomeMunicipioTag = false;
@@ -97,7 +97,7 @@ public class ReadKMLFile {
 						String[] tempcoordenadasTag;
 						// System.out.println("coordenadasTag : ");
 						/* Dividindo a string de coordenadasTag utilizando ',0' como separador */
-						lines.add("Coordenadas: " + valorDaTag.toString());
+						//lines.add("Coordenadas: " + valorDaTag.toString());
 						tempcoordenadasTag = valorDaTag.toString().trim().split(",0");
 						for (int i = 0; i < tempcoordenadasTag.length; i++) {
 							/*
@@ -130,7 +130,7 @@ public class ReadKMLFile {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File file = new File("d://municipiosrj.kml");
+			 File file = new File("c:/xml/municipiosrj.kml");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(file);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
