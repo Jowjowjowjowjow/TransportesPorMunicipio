@@ -38,7 +38,7 @@ public class LeitorDeArquivosKML {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
-			Path file2 = Paths.get("C:\\xml\\oi.txt");
+			Path ArquivoDestino = Paths.get("C:\\xml\\oi.txt");
 			DefaultHandler handler = new DefaultHandler() {
 
 				boolean tagNomeDoMunicipio = false;
@@ -98,13 +98,13 @@ public class LeitorDeArquivosKML {
 						codigoMunicipioTag = false;
 					}
 
-					if (coordenadasTag) {
-						String[] tempcoordenadasTag;
+					if (tagCoordenadas) {
+						String[] listaDeCoordenadaXYs;
 						// System.out.println("coordenadasTag : ");
 						/* Dividindo a string de coordenadasTag utilizando ',0' como separador */
 						//lines.add("Coordenadas: " + valorDaTag.toString());
-						tempcoordenadasTag = valorDaTag.toString().trim().split(",0");
-						for (int i = 0; i < tempcoordenadasTag.length; i++) {
+						listaDeCoordenadaXYs = valorDaTag.toString().trim().split(",0");
+						for (int i = 0; i < listaDeCoordenadaXYs.length; i++) {
 							/*
 							 * Dividindo uma única coordenada em X e Y, CoordenadaXY[0] = X e CoordenadaXY[1] = Y
 							 */
@@ -132,7 +132,7 @@ public class LeitorDeArquivosKML {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File file = new File("c:/xml/municipiosrj.kml");
+			 File kmlDeEntrada = new File("c:/xml/municipiosrj.kml");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(kmlDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
