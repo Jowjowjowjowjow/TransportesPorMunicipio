@@ -64,22 +64,13 @@ public class LeitorDeArquivosOSM {
 						if (atributos.getValue("k").equalsIgnoreCase("aeroway") && atributos.getValue("v").equalsIgnoreCase("aerodrome")) {
 							System.out.println("Aeroporto detectado");
 							noStreetMap.setTipo(TipoNo.AEROPORTO);
-							tagAeroporto = true;
+							//tagAeroporto = true;
 						}else if (atributos.getValue("k").equalsIgnoreCase("landuse") && atributos.getValue("v").equalsIgnoreCase("harbour")) {
 							System.out.println("Porto detectado");
 							noStreetMap.setTipo(TipoNo.PORTO);
-						} else if (atributos.getValue("k").equalsIgnoreCase("Highway") && 
-								(atributos.getValue("v").equalsIgnoreCase("primary") || 
-								atributos.getValue("v").equalsIgnoreCase("secondary") ||
-								atributos.getValue("v").equalsIgnoreCase("tertiary") ||
-								atributos.getValue("v").equalsIgnoreCase("motorway") ||
-								atributos.getValue("v").equalsIgnoreCase("trunk"))) {
+						} else if (atributos.getValue("k").equalsIgnoreCase("Highway") && atributos.getValue("v").equalsIgnoreCase("primary") ) {
 							System.out.println("Estrada detectada");
-								if(atributos.getValue("k").equalsIgnoreCase("name")) {
-									noStreetMap.setNome(atributos.getValue("v"));
-									tagNome = true;
-								}
-							
+							noStreetMap.setTipo(TipoNo.RODOVIA);	
 						}
 						
 						if (atributos.getValue("k").equalsIgnoreCase("name")) {
