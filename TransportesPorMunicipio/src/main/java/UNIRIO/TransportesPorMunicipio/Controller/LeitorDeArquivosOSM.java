@@ -35,7 +35,7 @@ public class LeitorDeArquivosOSM {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
-			Path ArquivoDestino = Paths.get("d:\\ResultadoFiltragemOSM.txt");
+			Path ArquivoDestino = Paths.get("c:\\xml\\ResultadoFiltragemOSM.txt");
 			DefaultHandler handler = new DefaultHandler() {
 
 				//boolean tagNomeDoMunicipio = false;
@@ -68,6 +68,18 @@ public class LeitorDeArquivosOSM {
 						}else if (atributos.getValue("k").equalsIgnoreCase("landuse") && atributos.getValue("v").equalsIgnoreCase("harbour")) {
 							System.out.println("Porto detectado");
 							noStreetMap.setTipo(TipoNo.PORTO);
+						} else if (atributos.getValue("k").equalsIgnoreCase("Highway") && 
+								(atributos.getValue("v").equalsIgnoreCase("primary") || 
+								atributos.getValue("v").equalsIgnoreCase("secondary") ||
+								atributos.getValue("v").equalsIgnoreCase("tertiary") ||
+								atributos.getValue("v").equalsIgnoreCase("motorway") ||
+								atributos.getValue("v").equalsIgnoreCase("trunk"))) {
+							System.out.println("Estrada detectada");
+								if(atributos.getValue("k").equalsIgnoreCase("name")) {
+									noStreetMap.setNome(atributos.getValue("v"));
+									tagNome = true;
+								}
+							
 						}
 						
 						if (atributos.getValue("k").equalsIgnoreCase("name")) {
@@ -111,7 +123,7 @@ public class LeitorDeArquivosOSM {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File osmDeEntrada = new File("d://municipio.osm");
+			 File osmDeEntrada = new File("c://xml//municipio.osm");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(osmDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");

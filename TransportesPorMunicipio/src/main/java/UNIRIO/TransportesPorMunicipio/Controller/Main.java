@@ -10,7 +10,7 @@ import UNIRIO.TransportesPorMunicipio.Modelos.Poligono;
 public class Main {
 
 	public static void main(String[] args) {
-		ArrayList<Municipio> municipios = LeitorDeArquivosKML.carregaMunicipios();
+		/*ArrayList<Municipio> municipios = LeitorDeArquivosKML.carregaMunicipios();
 		ArrayList<String> conteudoArquivoBoundingBox = new ArrayList<String>();
 		for(Municipio municipio: municipios) {
 			calculaBoundingBox(municipio);
@@ -29,8 +29,8 @@ public class Main {
 			
 		}
 		
-		LeitorDeArquivosKML.escreveArquivo("d:\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
-		
+		LeitorDeArquivosKML.escreveArquivo("c:\\xml\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
+		*/
 		LeitorDeArquivosOSM.carregaLocais();
 
 		
