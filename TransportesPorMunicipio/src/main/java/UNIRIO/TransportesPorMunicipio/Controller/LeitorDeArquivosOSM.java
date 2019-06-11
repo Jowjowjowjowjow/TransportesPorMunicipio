@@ -50,8 +50,9 @@ public class LeitorDeArquivosOSM {
 						throws SAXException {
 					valorDaTag = new StringBuffer();
 					/* Flag para a tag de coordenada */
-					if (nomeDaTag.equalsIgnoreCase("way")) {
-						if (noStreetMap.getNome() != null && noStreetMap.getTipo() != null) {
+					if (nomeDaTag.equalsIgnoreCase("way") || nomeDaTag.equalsIgnoreCase("relation")) {
+						if (noStreetMap.getNome() != null && noStreetMap.getTipo() != null && !existeNo(noStreetMap)) {
+							
 							linhasArquivoResultante.add("Nome: " + noStreetMap.getNome());
 							linhasArquivoResultante.add("Tipo: " + noStreetMap.getTipo());
 							nosStreetMap.add(noStreetMap);
@@ -68,9 +69,12 @@ public class LeitorDeArquivosOSM {
 						}else if (atributos.getValue("k").equalsIgnoreCase("landuse") && atributos.getValue("v").equalsIgnoreCase("harbour")) {
 							System.out.println("Porto detectado");
 							noStreetMap.setTipo(TipoNo.PORTO);
-						} else if (atributos.getValue("k").equalsIgnoreCase("Highway") && atributos.getValue("v").equalsIgnoreCase("primary") ) {
-							System.out.println("Estrada detectada");
+						}else if (atributos.getValue("k").equalsIgnoreCase("Highway") && atributos.getValue("v").equalsIgnoreCase("primary") ) {
+							System.out.println("Rodovia detectada");
 							noStreetMap.setTipo(TipoNo.RODOVIA);	
+						}else if (atributos.getValue("k").equalsIgnoreCase("railway") && atributos.getValue("v").equalsIgnoreCase("rail") ) {
+							System.out.println("Ferrovia detectada");
+							noStreetMap.setTipo(TipoNo.FERROVIA);
 						}
 						
 						if (atributos.getValue("k").equalsIgnoreCase("name")) {
@@ -135,6 +139,16 @@ public class LeitorDeArquivosOSM {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static boolean existeNo(NoStreetMap noStreetMap) {
+		boolean achou = false;
+		for(NoStreetMap no: nosStreetMap) {
+			if(no.getNome().equalsIgnoreCase(noStreetMap.getNome()) && no.getTipo()==noStreetMap.getTipo()) {
+				achou = true;
+			}
+		}
+		return achou;
 	}
 
 }
