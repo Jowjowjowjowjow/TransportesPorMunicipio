@@ -16,15 +16,16 @@ public class BaixaArquivoOSM {
 	3 = maior longitude
 	4 = maior latitude*/
 
+	/*https://overpass-api.de/api/map?bbox=-43.79610192399996,-23.08240303799993,-43.09903939999998,-22.74605452899993*/
 	public static void BaixaArquivo(double menorLongitude, double menorLatitude, double maiorLongitude,
 			double maiorLatitude) {
-
+		
 		try {
-        URL url = new URL("https://www.overpass-api.de/api/xapi_meta?*"
-        + "[bbox="+menorLongitude+","+menorLatitude+","+maiorLongitude+","+maiorLatitude+"]");
-        System.out.println("URL: " + "https://www.overpass-api.de/api/xapi_meta?way"
-                + "[bbox="+menorLongitude+","+menorLatitude+","+maiorLongitude+","+maiorLatitude+"]");
-        File file = new File("d://municipio.osm");
+        URL url = new URL("https://overpass-api.de/api/map?"
+        + "bbox="+menorLongitude+","+menorLatitude+","+maiorLongitude+","+maiorLatitude);
+        System.out.println("URL: " + "https://overpass-api.de/api/map?"
+                + "bbox="+menorLongitude+","+menorLatitude+","+maiorLongitude+","+maiorLatitude);
+        File file = new File("c:\\xml\\municipio.osm");
 
         InputStream is = url.openStream();
         FileOutputStream fos = new FileOutputStream(file);

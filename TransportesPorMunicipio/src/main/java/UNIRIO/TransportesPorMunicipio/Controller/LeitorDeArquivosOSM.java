@@ -35,7 +35,7 @@ public class LeitorDeArquivosOSM {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
-			Path ArquivoDestino = Paths.get("d:\\ResultadoFiltragemOSM.txt");
+			Path ArquivoDestino = Paths.get("c:\\xml\\ResultadoFiltragemOSM.txt");
 			DefaultHandler handler = new DefaultHandler() {
 
 				//boolean tagNomeDoMunicipio = false;
@@ -50,8 +50,9 @@ public class LeitorDeArquivosOSM {
 						throws SAXException {
 					valorDaTag = new StringBuffer();
 					/* Flag para a tag de coordenada */
-					if (nomeDaTag.equalsIgnoreCase("way")) {
-						if (noStreetMap.getNome() != null && noStreetMap.getTipo() != null) {
+					if (nomeDaTag.equalsIgnoreCase("way") || nomeDaTag.equalsIgnoreCase("relation")) {
+						if (noStreetMap.getNome() != null && noStreetMap.getTipo() != null && !existeNo(noStreetMap)) {
+							
 							linhasArquivoResultante.add("Nome: " + noStreetMap.getNome());
 							linhasArquivoResultante.add("Tipo: " + noStreetMap.getTipo());
 							nosStreetMap.add(noStreetMap);
@@ -64,10 +65,16 @@ public class LeitorDeArquivosOSM {
 						if (atributos.getValue("k").equalsIgnoreCase("aeroway") && atributos.getValue("v").equalsIgnoreCase("aerodrome")) {
 							System.out.println("Aeroporto detectado");
 							noStreetMap.setTipo(TipoNo.AEROPORTO);
-							tagAeroporto = true;
+							//tagAeroporto = true;
 						}else if (atributos.getValue("k").equalsIgnoreCase("landuse") && atributos.getValue("v").equalsIgnoreCase("harbour")) {
 							System.out.println("Porto detectado");
 							noStreetMap.setTipo(TipoNo.PORTO);
+						}else if (atributos.getValue("k").equalsIgnoreCase("Highway") && atributos.getValue("v").equalsIgnoreCase("primary") ) {
+							System.out.println("Rodovia detectada");
+							noStreetMap.setTipo(TipoNo.RODOVIA);	
+						}else if (atributos.getValue("k").equalsIgnoreCase("railway") && atributos.getValue("v").equalsIgnoreCase("rail") ) {
+							System.out.println("Ferrovia detectada");
+							noStreetMap.setTipo(TipoNo.FERROVIA);
 						}
 						
 						if (atributos.getValue("k").equalsIgnoreCase("name")) {
@@ -111,7 +118,7 @@ public class LeitorDeArquivosOSM {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File osmDeEntrada = new File("d://municipio.osm");
+			 File osmDeEntrada = new File("c://xml//municipio.osm");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(osmDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
@@ -132,6 +139,16 @@ public class LeitorDeArquivosOSM {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static boolean existeNo(NoStreetMap noStreetMap) {
+		boolean achou = false;
+		for(NoStreetMap no: nosStreetMap) {
+			if(no.getNome().equalsIgnoreCase(noStreetMap.getNome()) && no.getTipo()==noStreetMap.getTipo()) {
+				achou = true;
+			}
+		}
+		return achou;
 	}
 
 }
