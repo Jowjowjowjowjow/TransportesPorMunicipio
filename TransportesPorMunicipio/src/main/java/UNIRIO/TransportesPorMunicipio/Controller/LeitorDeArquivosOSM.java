@@ -132,14 +132,6 @@ public class LeitorDeArquivosOSM {
 		}
 		return nosStreetMap;
 	}
-	public static void escreveArquivo(String destino, List<String> conteudo) {
-		Path ArquivoDestino = Paths.get(destino);
-		try {
-			Files.write(ArquivoDestino, conteudo, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private static boolean existeNo(NoStreetMap noStreetMap) {
 		boolean achou = false;

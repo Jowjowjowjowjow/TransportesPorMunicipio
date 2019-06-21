@@ -13,12 +13,50 @@ public class BoundingBox {
 		this.maiorLongitude = maiorLongitude;	
 	}
 
-	
+	/**
+	 * Função com o objetivo de retornar a Bounding Box em forma de String
+	 * @author Jow
+	 * @return Maior/Menor Latitude/Longitude
+	 */
 	public String exibeBoundingBox() {
 		return new String("\nMenor Latitude: " +this.menorLatitude
 		+"\nMaior Latitude: " + this.maiorLatitude
 		+"\nMenor Longitude: "+ this.menorLongitude
 		+"\nMaior Longitude: "+ this.maiorLongitude);
+	}
+	
+	/**
+	 * Função estática com função de calcular a Bounding Box de um município
+	 * @author Jow
+	 * @param municipio Município que terá a Bounding Box calculada
+	 * @return BoundingBox do município
+	 */
+	public static BoundingBox calculaBoundingBox(Municipio municipio){
+		double maiorLatitude = Double.NEGATIVE_INFINITY;
+		double menorLatitude = Double.MAX_VALUE;
+		double maiorLongitude = Double.NEGATIVE_INFINITY;
+		double menorLongitude = Double.MAX_VALUE;
+		
+		for(Poligono poligono: municipio.getPoligonos()) {
+			for(Coordenada coordenada: poligono.getCoordenadas()) {
+				if(coordenada.getLatitude() > maiorLatitude) {
+					maiorLatitude = coordenada.getLatitude();
+				}
+				if(coordenada.getLatitude() < menorLatitude) {
+					menorLatitude = coordenada.getLatitude();
+				}
+				if(coordenada.getLongitude() > maiorLongitude) {
+					maiorLongitude = coordenada.getLongitude();
+				}
+				if(coordenada.getLongitude() < menorLongitude) {
+					menorLongitude = coordenada.getLongitude();
+				}
+			}
+		}
+		BoundingBox boundingBox = new BoundingBox(menorLatitude,maiorLatitude,menorLongitude,maiorLongitude);
+		
+		return boundingBox;
+		
 	}
 
 

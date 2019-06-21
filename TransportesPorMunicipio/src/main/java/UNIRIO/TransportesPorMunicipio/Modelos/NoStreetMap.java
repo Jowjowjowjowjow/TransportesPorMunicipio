@@ -11,7 +11,6 @@ public class NoStreetMap {
 	}
 	
 	public NoStreetMap() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getNome() {

@@ -36,5 +36,6 @@ public class Municipio {
 	public void setBoundingBox(BoundingBox boundingBox) {
 		this.boundingBox = boundingBox;
 	}
+
 	
 }

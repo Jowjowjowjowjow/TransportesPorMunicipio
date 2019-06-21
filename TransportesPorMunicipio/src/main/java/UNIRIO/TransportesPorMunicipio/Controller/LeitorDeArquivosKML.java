@@ -2,18 +2,13 @@ package UNIRIO.TransportesPorMunicipio.Controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFileChooser;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
@@ -30,26 +25,24 @@ public class LeitorDeArquivosKML {
 	private static Municipio municipio = new Municipio();
 	private static ArrayList<Municipio> municipios = new ArrayList<Municipio>();
 	private static Poligono poligono = new Poligono();
-	private static List<String> linhasArquivoResultante = new ArrayList<String>();
-	static boolean tagPlacemark = false;
 	
 	public static ArrayList<Municipio> carregaMunicipios() {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			
-			Path ArquivoDestino = Paths.get("C:\\xml\\oi.txt");
-			DefaultHandler handler = new DefaultHandler() {
 
+			DefaultHandler handler = new DefaultHandler() {
+				boolean tagPlacemark = false;
 				boolean tagNomeDoMunicipio = false;
-				boolean codigoMunicipioTag = false;
+				boolean tagCodigoMunicipio = false;
 				boolean tagCoordenadas = false;
 				StringBuffer valorDaTag;
-				
+
 				/* Bloco executado em todo início de tag */
 				public void startElement(String uri, String localName, String nomeDaTag, Attributes attributos)
 						throws SAXException {
 					valorDaTag = new StringBuffer();
+
 					/*
 					 * Flag para a tag de SimpleData e diferenciar nome do município do código do
 					 * município
@@ -58,7 +51,7 @@ public class LeitorDeArquivosKML {
 						if (attributos.getValue("name").equalsIgnoreCase("NM_MUNICIP")) {
 							tagNomeDoMunicipio = true;
 						} else if (attributos.getValue("name").equalsIgnoreCase("CD_GEOCMU")) {
-							codigoMunicipioTag = true;
+							tagCodigoMunicipio = true;
 						}
 					}
 					/* Flag para a tag de coordenada */
@@ -71,12 +64,13 @@ public class LeitorDeArquivosKML {
 						municipio = new Municipio();
 						tagPlacemark = true;
 					}
-
 				}
 
-				/* Responsável por pegar os valores da tag 
-				 * Utiliza StringBuffer e sua função append porque pode ser chamado diversas vezes
-				 * para um mesmo valor de tag caso o mesmo seja muito grande*/
+				/*
+				 * Responsável por pegar os valores entre as tags. Utiliza StringBuffer e sua
+				 * função append porque pode ser chamado diversas vezes para um mesmo valor de
+				 * tag caso o mesmo seja muito grande, o que ocorre na tag Coordinates
+				 */
 				public void characters(char ch[], int start, int length) throws SAXException {
 					valorDaTag.append(new String(ch, start, length).trim());
 				}
@@ -86,41 +80,38 @@ public class LeitorDeArquivosKML {
 
 					if (tagNomeDoMunicipio) {
 						// System.out.println("Nome do município: " + valorDaTag.toString());
-						linhasArquivoResultante.add("Nome do município: " + valorDaTag.toString());
 						municipio.setNome(valorDaTag.toString());
 						tagNomeDoMunicipio = false;
 					}
 
-					if (codigoMunicipioTag) {
+					if (tagCodigoMunicipio) {
 						// System.out.println("Codigo do município:" + valorDaTag.toString());
-						linhasArquivoResultante.add("Codigo do município: " + valorDaTag.toString());
 						municipio.setCodigoIBGE(Integer.parseInt(valorDaTag.toString()));
-						codigoMunicipioTag = false;
+						tagCodigoMunicipio = false;
 					}
 
 					if (tagCoordenadas) {
-						String[] listaDeCoordenadaXYs;
-						// System.out.println("coordenadasTag : ");
+						String[] listaDeCoordenadas;
 						/* Dividindo a string de coordenadasTag utilizando ',0' como separador */
-						//lines.add("Coordenadas: " + valorDaTag.toString());
-						listaDeCoordenadaXYs = valorDaTag.toString().trim().split(",0");
-						for (int i = 0; i < listaDeCoordenadaXYs.length; i++) {
+						listaDeCoordenadas = valorDaTag.toString().trim().split(",0");
+						for (int i = 0; i < listaDeCoordenadas.length; i++) {
+							
 							/*
-							 * Dividindo uma única coordenada em X e Y, CoordenadaXY[0] = X e CoordenadaXY[1] = Y
+							 * Dividindo uma única coordenada em Longitude e Latitude, CoordenadaXY[0] = Longitude e
+							 * CoordenadaXY[1] = Latitude
 							 */
-							String[] CoordenadaXY = listaDeCoordenadaXYs[i].trim().split(",");
-							linhasArquivoResultante.add("X: " + CoordenadaXY[0] + " Y: "+ CoordenadaXY[1]);
+							String[] CoordenadaXY = listaDeCoordenadas[i].trim().split(",");
 							Coordenada coordenada = new Coordenada(Double.parseDouble(CoordenadaXY[0]),
 									Double.parseDouble(CoordenadaXY[1]));
 							poligono.addCoordenada(coordenada);
 						}
-						/*O fim de cada tag de coordenada também é o fim de um polígono */
+						/* O fim de cada tag de coordenada também é o fim de um polígono */
 						municipio.addPoligono(poligono);
 						poligono = new Poligono();
-						tagCoordenadas = false;	
+						tagCoordenadas = false;
 					}
-					
-					if(tagPlacemark) {
+
+					if (tagPlacemark) {
 						if (municipio != null) {
 							municipios.add(municipio);
 						}
@@ -129,30 +120,19 @@ public class LeitorDeArquivosKML {
 				}
 			};
 
-			//JFileChooser file = new JFileChooser();
-			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			//file.showSaveDialog(null);
-			 File kmlDeEntrada = new File("c:\\xml\\municipiosrj.kml");
-			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
+			
+			File kmlDeEntrada = new File("D:\\municipiosrj.kml");
 			InputStream inputStream = new FileInputStream(kmlDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			InputSource is = new InputSource(reader);
 			is.setEncoding("UTF-8");
 			saxParser.parse(is, handler);
-			Files.write(ArquivoDestino, linhasArquivoResultante, Charset.forName("UTF-8"));
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return municipios;
-	}
-	public static void escreveArquivo(String destino, List<String> conteudo) {
-		Path ArquivoDestino = Paths.get(destino);
-		try {
-			Files.write(ArquivoDestino, conteudo, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
