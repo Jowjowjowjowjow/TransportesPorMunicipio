@@ -21,6 +21,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 import UNIRIO.TransportesPorMunicipio.Modelos.TipoNo;
 
@@ -30,17 +31,15 @@ public class LeitorDeArquivosOSM {
 	private static List<String> linhasArquivoResultante = new ArrayList<String>();
 	static boolean tagWay = false;
 	static String nome = "";
-	public static ArrayList<NoStreetMap> carregaLocais() {
+	public static ArrayList<NoStreetMap> carregaLocais(Municipio municipio) {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
-			Path ArquivoDestino = Paths.get("c:\\xml\\ResultadoFiltragemOSM.txt");
+			Path ArquivoDestino = Paths.get("D:\\ResultadoFiltragemOSM_"+municipio.getNome()+"_"+municipio.getCodigoIBGE()+".txt");
 			DefaultHandler handler = new DefaultHandler() {
 
-				//boolean tagNomeDoMunicipio = false;
-				//boolean codigoMunicipioTag = false;
-				//boolean tagCoordenadas = false;
+
 				boolean tagNome = false;
 				boolean tagAeroporto = false;
 				StringBuffer valorDaTag;
@@ -118,7 +117,7 @@ public class LeitorDeArquivosOSM {
 			//JFileChooser file = new JFileChooser();
 			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//file.showSaveDialog(null);
-			 File osmDeEntrada = new File("c://xml//municipio.osm");
+			 File osmDeEntrada = new File("D://"+municipio.getNome()+"_"+municipio.getCodigoIBGE()+".osm");
 			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
 			InputStream inputStream = new FileInputStream(osmDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");

@@ -37,7 +37,7 @@ public class Utilitarios {
 		if(checaSeArquivoExiste(destino)) {
 			System.out.println("Arquivo já em cache");
 		}else {
-			System.out.println("Fazendo download do OSM");
+			System.out.println("Arquivo não encontrado, Fazendo download");
 			try {
 				FileOutputStream fileOutput = new FileOutputStream(new File(destino));
 				int bytes = 0;
@@ -62,6 +62,7 @@ public class Utilitarios {
 	 */
 	public static boolean checaSeArquivoExiste(String destino) {
 		File file = new File(destino);
+		System.out.println("Verificando se o arquivo " + destino + " já existe.");
 		return file.exists();
 	}
 

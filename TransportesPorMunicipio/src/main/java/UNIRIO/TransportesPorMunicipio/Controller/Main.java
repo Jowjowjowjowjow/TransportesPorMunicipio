@@ -21,17 +21,19 @@ public class Main {
 			System.out.println("Quantidade de polígonos: " + municipio.getPoligonos().size());
 			conteudoArquivoBoundingBox.add("Quantidade de polígonos: " + municipio.getPoligonos().size());
 			System.out.println("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
-			conteudoArquivoBoundingBox.add("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
-			
-			if(municipio.getNome().equalsIgnoreCase("Rio de Janeiro")) {
-				BaixaArquivoOSM.BaixaArquivo(municipio);
-			}
-			
+			conteudoArquivoBoundingBox.add("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");		
+			Utilitarios.criaEEscreveArquivo("D:\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
 		}
 		
-		Utilitarios.criaEEscreveArquivo("D:\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
+		for(Municipio municipio: municipios) {
+			if(municipio.getNome().equalsIgnoreCase("Rio de Janeiro")) {
+				BaixaArquivoOSM.BaixaArquivo(municipio);
+				LeitorDeArquivosOSM.carregaLocais(municipio);
+			}
+		}
 		
-		//LeitorDeArquivosOSM.carregaLocais();
+		
+		
 
 		
 		
