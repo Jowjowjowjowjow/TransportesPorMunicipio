@@ -2,144 +2,96 @@ package UNIRIO.TransportesPorMunicipio.Controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 import UNIRIO.TransportesPorMunicipio.Modelos.TipoNo;
 
 public class LeitorDeArquivosOSM {
-	private static NoStreetMap noStreetMap = new NoStreetMap();
-	private static ArrayList<NoStreetMap> nosStreetMap = new ArrayList<NoStreetMap>();
-	private static List<String> linhasArquivoResultante = new ArrayList<String>();
-	static boolean tagWay = false;
-	static String nome = "";
-	public static ArrayList<NoStreetMap> carregaLocais(Municipio municipio) {
+	
+	private ArrayList<NoStreetMap> nosStreetMap = new ArrayList<NoStreetMap>();	
+	IFileWriter fileWriter;
+	SAXParser saxParser;
+	
+	public LeitorDeArquivosOSM(SAXParser saxParser, IFileWriter fileWriter) {
+		this.saxParser = saxParser;
+		this.fileWriter = fileWriter;
+	}
+	
+	public void carregaLocais() {
 		try {
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			SAXParser saxParser = factory.newSAXParser();
-			
-			Path ArquivoDestino = Paths.get("D:\\ResultadoFiltragemOSM_"+municipio.getNome()+"_"+municipio.getCodigoIBGE()+".txt");
 			DefaultHandler handler = new DefaultHandler() {
-
-
-				boolean tagNome = false;
-				boolean tagAeroporto = false;
-				StringBuffer valorDaTag;
-				
-				/* Bloco executado em todo início de tag */
-				public void startElement(String uri, String localName, String nomeDaTag, Attributes atributos)
-						throws SAXException {
-					valorDaTag = new StringBuffer();
-					/* Flag para a tag de coordenada */
+				NoStreetMap streetMapNode = new NoStreetMap();				
+				/**
+				 * Bloco executado em todo início de tag 
+				 * */
+				public void startElement(String uri, String localName, String nomeDaTag, Attributes atributos) throws SAXException {					
 					if (nomeDaTag.equalsIgnoreCase("way") || nomeDaTag.equalsIgnoreCase("relation")) {
-						if (noStreetMap.getNome() != null && noStreetMap.getTipo() != null && !existeNo(noStreetMap)) {
-							
-							linhasArquivoResultante.add("Nome: " + noStreetMap.getNome());
-							linhasArquivoResultante.add("Tipo: " + noStreetMap.getTipo());
-							nosStreetMap.add(noStreetMap);
+						if (streetMapNode.getNome() != null && streetMapNode.getTipo() != null && !nodeNotExistsOnList(streetMapNode)) {
+							fileWriter.addLine(streetMapNode);
+							nosStreetMap.add(streetMapNode);
 						}
-						noStreetMap = new NoStreetMap();
-						tagWay = true;
+						streetMapNode = new NoStreetMap();
 					}
 					
-					if (nomeDaTag.equalsIgnoreCase("tag")) {
-						if (atributos.getValue("k").equalsIgnoreCase("aeroway") && atributos.getValue("v").equalsIgnoreCase("aerodrome")) {
-							System.out.println("Aeroporto detectado");
-							noStreetMap.setTipo(TipoNo.AEROPORTO);
-							//tagAeroporto = true;
-						}else if (atributos.getValue("k").equalsIgnoreCase("landuse") && atributos.getValue("v").equalsIgnoreCase("harbour")) {
-							System.out.println("Porto detectado");
-							noStreetMap.setTipo(TipoNo.PORTO);
-						}else if (atributos.getValue("k").equalsIgnoreCase("Highway") && atributos.getValue("v").equalsIgnoreCase("primary") ) {
-							System.out.println("Rodovia detectada");
-							noStreetMap.setTipo(TipoNo.RODOVIA);	
-						}else if (atributos.getValue("k").equalsIgnoreCase("railway") && atributos.getValue("v").equalsIgnoreCase("rail") ) {
-							System.out.println("Ferrovia detectada");
-							noStreetMap.setTipo(TipoNo.FERROVIA);
-						}
-						
-						if (atributos.getValue("k").equalsIgnoreCase("name")) {
-							//System.out.println("Nome detectado");
-							noStreetMap.setNome(atributos.getValue("v"));
-							tagNome = true;
-						}
-					}
-					
-
-				}
-
-				/* Responsável por pegar os valores da tag 
-				 * Utiliza StringBuffer e sua função append porque pode ser chamado diversas vezes
-				 * para um mesmo valor de tag caso o mesmo seja muito grande*/
-				public void characters(char ch[], int start, int length) throws SAXException {
-					valorDaTag.append(new String(ch, start, length).trim());
-				}
-
-				/* Bloco executado ao final de cada tag */
-				public void endElement(String uri, String localName, String nomeDaTag) throws SAXException {
-
-					if (tagNome) {
-						// System.out.println("Nome do município: " + valorDaTag.toString());
-						//linhasArquivoResultante.add("Nome do município: " + valorDaTag.toString());
-						tagNome = false;
-					}
-
-					if (tagAeroporto) {
-						// System.out.println("Codigo do município:" + valorDaTag.toString());
-						//linhasArquivoResultante.add("Codigo do município: " + valorDaTag.toString());
-						tagAeroporto = false;
-					}
-					
-					if(tagWay) {
-						tagWay = false;
+					if (nomeDaTag.equalsIgnoreCase("tag")) {	
+						streetMapNode = nodeWithAttributes(atributos, streetMapNode);
 					}
 				}
 			};
 
-			//JFileChooser file = new JFileChooser();
-			//file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			//file.showSaveDialog(null);
-			 File osmDeEntrada = new File("D://"+municipio.getNome()+"_"+municipio.getCodigoIBGE()+".osm");
-			//InputStream inputStream = new FileInputStream(file.getSelectedFile());
+			File osmDeEntrada = new File("//home//gabriel//municipio.osm");
 			InputStream inputStream = new FileInputStream(osmDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			InputSource is = new InputSource(reader);
 			is.setEncoding("UTF-8");
 			saxParser.parse(is, handler);
-			Files.write(ArquivoDestino, linhasArquivoResultante, Charset.forName("UTF-8"));
+			
+			fileWriter.writeFile();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return nosStreetMap;
-	}
+	}	
 	
-	private static boolean existeNo(NoStreetMap noStreetMap) {
-		boolean achou = false;
-		for(NoStreetMap no: nosStreetMap) {
-			if(no.getNome().equalsIgnoreCase(noStreetMap.getNome()) && no.getTipo()==noStreetMap.getTipo()) {
-				achou = true;
+	private boolean nodeNotExistsOnList(NoStreetMap streeMapNode) {
+		for(NoStreetMap node: nosStreetMap) {
+			if(node.getNome().equalsIgnoreCase(streeMapNode.getNome()) && node.getTipo() == streeMapNode.getTipo()) {
+				return true;
 			}
 		}
-		return achou;
+		return false;
+	}
+
+	private NoStreetMap nodeWithAttributes(Attributes attributes, NoStreetMap node) {
+		if (attributes.getValue("k").equalsIgnoreCase(TipoNo.AEROPORTO.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.AEROPORTO.value)) {
+			System.out.println("Aeroporto detectado");
+			node.setTipo(TipoNo.AEROPORTO);
+		} else if (attributes.getValue("k").equalsIgnoreCase(TipoNo.PORTO.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.PORTO.value)) {
+			System.out.println("Porto detectado");
+			node.setTipo(TipoNo.PORTO);
+		} else if (attributes.getValue("k").equalsIgnoreCase(TipoNo.RODOVIA.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.RODOVIA.value) ) {
+			System.out.println("Rodovia detectada");
+			node.setTipo(TipoNo.RODOVIA);	
+		} else if (attributes.getValue("k").equalsIgnoreCase(TipoNo.FERROVIA.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.FERROVIA.value) ) {
+			System.out.println("Ferrovia detectada");
+			node.setTipo(TipoNo.FERROVIA);
+		}
+		
+		if (attributes.getValue("k").equalsIgnoreCase("name")) {
+			node.setNome(attributes.getValue("v"));
+		}
+		
+		return node;
 	}
 
 }
