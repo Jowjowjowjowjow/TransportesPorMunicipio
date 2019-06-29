@@ -13,29 +13,22 @@ import javax.xml.parsers.SAXParser;
 import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 
-public class FileWriter implements IFileWriter {
-	
-	private LeitorDeArquivosOSM reader;
+public class KMLWriter implements IFileWriter {
+	private LeitorDeArquivosKML reader;
 	private SAXParser saxParser;
 	
 	private List<String> resultantFile = new ArrayList<String>();
-	private final Path path = Paths.get("c:\\xml\\resultadoFiltragemOSM.txt");
+	private final Path path = Paths.get("//home//gabriel//oi.txt");
 	
-	public FileWriter(SAXParser saxParser) {
+	public KMLWriter(SAXParser saxParser) {
 		this.saxParser = saxParser;
 	}
 	
 	@Override
-	public void initializeRead() {		
-		reader = new LeitorDeArquivosOSM(saxParser, this);
-		reader.carregaLocais();
-	}	
-	
-	
-	@Override
-	public void addLine(NoStreetMap node) {
-		resultantFile.add("Nome: " + node.getNome());
-		resultantFile.add("Tipo: " + node.getTipo());
+	public void initializeRead() {
+		reader = new LeitorDeArquivosKML(saxParser, this);
+		reader.carregaMunicipios();
+		
 	}
 
 	@Override
@@ -46,13 +39,19 @@ public class FileWriter implements IFileWriter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	@Override
-	public void addLineKML(Municipio municipio) {
-	
+		
 	}
 
+	@Override
+	public void addLine(NoStreetMap node) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	
+	public void addLineKML(Municipio municipio) {
+		resultantFile.add("Nome: " + municipio.getNome());
+		resultantFile.add("Tipo: " + municipio.getCodigoIBGE());
+		resultantFile.add("Coordenadas: " + municipio.getBoundingBox());
+		
+	}
 }

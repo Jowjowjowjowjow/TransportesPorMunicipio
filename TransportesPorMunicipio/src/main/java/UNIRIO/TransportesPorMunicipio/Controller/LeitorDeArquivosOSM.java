@@ -49,7 +49,7 @@ public class LeitorDeArquivosOSM {
 				}
 			};
 
-			File osmDeEntrada = new File("//home//gabriel//municipio.osm");
+			File osmDeEntrada = new File("c://xml//municipio.osm");
 			InputStream inputStream = new FileInputStream(osmDeEntrada);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			InputSource is = new InputSource(reader);
