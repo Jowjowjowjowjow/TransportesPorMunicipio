@@ -24,7 +24,7 @@ public class BaixaArquivoOSM {
 	 * @author Jow
 	 */
 	public static void BaixaArquivo(Municipio municipio) {
-		String caminhoArquivo = "D://"+municipio.getNome()+"_"+municipio.getCodigoIBGE()+".osm";
+		String caminhoArquivo = "//home//gabriel//municipio.osm";
 		try {
 			URL url = new URL("https://overpass-api.de/api/map?"
 			+ "bbox="+municipio.getBoundingBox().getMenorLongitude()+","+municipio.getBoundingBox().getMenorLatitude()+","+municipio.getBoundingBox().getMaiorLongitude()+","+
