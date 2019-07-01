@@ -1,10 +1,5 @@
 package UNIRIO.TransportesPorMunicipio.Controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
@@ -13,57 +8,50 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import UNIRIO.TransportesPorMunicipio.Modelos.ISAXHandler;
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 import UNIRIO.TransportesPorMunicipio.Modelos.TipoNo;
 
-public class LeitorDeArquivosOSM {
+public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 	
 	private ArrayList<NoStreetMap> nosStreetMap = new ArrayList<NoStreetMap>();	
-	IFileWriter fileWriter;
-	SAXParser saxParser;
+	private NoStreetMap streetMapNode = new NoStreetMap();	
+	private IFileWriter fileWriter;
+	private SAXParser saxParser;
+	private InputSource inputSource;
 	
-	public LeitorDeArquivosOSM(SAXParser saxParser, IFileWriter fileWriter) {
+	public OSMFileReader(SAXParser saxParser, IFileWriter fileWriter, InputSource inputSource) {
 		this.saxParser = saxParser;
 		this.fileWriter = fileWriter;
+		this.inputSource = inputSource;
 	}
 	
-	public void carregaLocais() {
+	public void loadLocals() {
 		try {
-			DefaultHandler handler = new DefaultHandler() {
-				NoStreetMap streetMapNode = new NoStreetMap();				
-				/**
-				 * Bloco executado em todo início de tag 
-				 * */
-				public void startElement(String uri, String localName, String nomeDaTag, Attributes atributos) throws SAXException {					
-					if (nomeDaTag.equalsIgnoreCase("way") || nomeDaTag.equalsIgnoreCase("relation")) {
-						if (streetMapNode.getNome() != null && streetMapNode.getTipo() != null && !nodeNotExistsOnList(streetMapNode)) {
-							fileWriter.addLine(streetMapNode);
-							nosStreetMap.add(streetMapNode);
-						}
-						streetMapNode = new NoStreetMap();
-					}
-					
-					if (nomeDaTag.equalsIgnoreCase("tag")) {	
-						streetMapNode = nodeWithAttributes(atributos, streetMapNode);
-					}
-				}
-			};
-
-			File osmDeEntrada = new File("//home//gabriel//municipio.osm");
-			InputStream inputStream = new FileInputStream(osmDeEntrada);
-			Reader reader = new InputStreamReader(inputStream, "UTF-8");
-			InputSource is = new InputSource(reader);
-			is.setEncoding("UTF-8");
-			saxParser.parse(is, handler);
-			
+			saxParser.parse(inputSource, this);
 			fileWriter.writeFile();
-
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 	}	
 	
-	private boolean nodeNotExistsOnList(NoStreetMap streeMapNode) {
+	@Override
+	public void startElement(String uri, String localName, String tagName, Attributes attrs) throws SAXException {					
+		if (tagName.equalsIgnoreCase("way") || tagName.equalsIgnoreCase("relation")) {
+			if (streetMapNode.getNome() != null && streetMapNode.getTipo() != null && !nodeExistsOnList(streetMapNode)) {
+				fileWriter.addLine(streetMapNode);
+				nosStreetMap.add(streetMapNode);
+			}
+			streetMapNode = new NoStreetMap();
+		}
+		
+		if (tagName.equalsIgnoreCase("tag")) {	
+			streetMapNode = nodeWithAttributes(attrs, streetMapNode);
+		}
+	}
+	
+	private boolean nodeExistsOnList(NoStreetMap streeMapNode) {
 		for(NoStreetMap node: nosStreetMap) {
 			if(node.getNome().equalsIgnoreCase(streeMapNode.getNome()) && node.getTipo() == streeMapNode.getTipo()) {
 				return true;

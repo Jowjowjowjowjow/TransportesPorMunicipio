@@ -10,26 +10,29 @@ import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 
+import org.xml.sax.InputSource;
+
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 
 public class FileWriter implements IFileWriter {
 	
-	private LeitorDeArquivosOSM reader;
+	private OSMFileReader reader;
 	private SAXParser saxParser;
+	private InputSource inputSource;
 	
 	private List<String> resultantFile = new ArrayList<String>();
 	private final Path path = Paths.get("//home//gabriel//bla.txt");
 	
-	public FileWriter(SAXParser saxParser) {
+	public FileWriter(SAXParser saxParser, InputSource inputSource) {
 		this.saxParser = saxParser;
+		this.inputSource = inputSource;
 	}
 	
 	@Override
 	public void initializeRead() {		
-		reader = new LeitorDeArquivosOSM(saxParser, this);
-		reader.carregaLocais();
+		reader = new OSMFileReader(saxParser, this, inputSource);
+		reader.loadLocals();
 	}	
-	
 	
 	@Override
 	public void addLine(NoStreetMap node) {
@@ -46,7 +49,5 @@ public class FileWriter implements IFileWriter {
 			e.printStackTrace();
 		}
 	}
-
-	
 	
 }

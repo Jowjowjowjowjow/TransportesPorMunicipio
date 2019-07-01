@@ -36,7 +36,7 @@ public class Utilitarios {
 	public static void criaBaixaEEscreveArquivo(String destino, InputStream conteudo) {
 		if(checaSeArquivoExiste(destino)) {
 			System.out.println("Arquivo já em cache");
-		}else {
+		} else {
 			System.out.println("Arquivo não encontrado, Fazendo download");
 			try {
 				FileOutputStream fileOutput = new FileOutputStream(new File(destino));

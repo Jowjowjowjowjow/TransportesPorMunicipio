@@ -1,19 +1,65 @@
 package UNIRIO.TransportesPorMunicipio.Controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
 import javax.xml.parsers.SAXParser;
+
+import org.xml.sax.InputSource;
+
+import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 
 
 public class Main {
 
-	public static void main(String[] args) {
+	private static File file;
+	private static Reader reader;
+	private static InputSource inputSource;
+	private static InputStream inputStream;
+	
+	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
+		
+		Boolean alreadyHasOSMFile = true;
 		
 		SAXManager saxManager = new SAXManager();
-		SAXParser parser = saxManager.getSaxParser();
-
-		FileWriter fileWriter = new FileWriter(parser);
+		SAXParser saxParser = saxManager.getSaxParser();
+		
+		if(!alreadyHasOSMFile) {
+			file = new File("//home//gabriel//municipiosrj.kml");
+			configFile();
+			readKMLFile(inputSource, saxParser);
+			
+		} else {
+			file = new File("//home//gabriel//municipios.osm");
+			configFile();
+			readOSMFile(inputSource, saxParser);
+		}
+		
+	}
+	
+	private static void configFile() throws FileNotFoundException, UnsupportedEncodingException {
+		inputStream = new FileInputStream(file);
+		reader = new InputStreamReader(inputStream, "UTF-8");
+		inputSource = new InputSource(reader);
+		inputSource.setEncoding("UTF-8");	
+	} 
+	
+	private static void readOSMFile(InputSource inputSource, SAXParser saxParser) {
+		FileWriter fileWriter = new FileWriter(saxParser, inputSource);
 		fileWriter.initializeRead();
-				
-//		ArrayList<Municipio> municipios = LeitorDeArquivosKML.carregaMunicipios();
+	}
+	
+	private static void readKMLFile(InputSource inputSource, SAXParser saxParser) {
+		KMLFileReader leitor = new KMLFileReader(saxParser, inputSource);
+		ArrayList<Municipio> municipios = leitor.loadCounties();
+		System.out.println(municipios.size());
+		
 //		ArrayList<String> conteudoArquivoBoundingBox = new ArrayList<String>();
 //		for(Municipio municipio: municipios) {
 //			municipio.setBoundingBox(BoundingBox.calculaBoundingBox(municipio));
