@@ -1,12 +1,8 @@
 package UNIRIO.TransportesPorMunicipio.Controller.OSM;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 
-import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Util.FileManager;
 
 /** 
@@ -38,7 +34,6 @@ public class OSMFileDownloader {
 	 * @author Jow
 	 */
 	public void downloadFile() {
-		//InputStream is = setUrl().openStream();
 		fileManager.downloadFile(filePath, is);
 	}
 	

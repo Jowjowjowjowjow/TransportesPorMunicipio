@@ -33,6 +33,7 @@ public class Main {
 	private static Reader reader;
 	private static InputSource inputSource;
 	private static InputStream inputStream;
+	private static Scanner scanner;
 	
 	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
 		
@@ -42,12 +43,12 @@ public class Main {
 		SAXParser saxParser = saxManager.getSaxParser();
 		
 		if(!alreadyHasOSMFile) {
-			file = new File("D:\\municipiosbr.kml");
+			file = new File("//home//gabriel//municipiosrj.kml");
 			configFile();
-			readKMLFile(inputSource, saxParser);
+			readKMLFile(saxParser);
 			
 		} else {
-			file = new File("D:\\xxxxx.osm");
+			file = new File("//home//gabriel//municipio.osm");
 			configFile();
 			readOSMFile(inputSource, saxParser);
 		}
@@ -80,13 +81,14 @@ public class Main {
 		fileWriter.initializeRead();
 	}
 	
-	private static void readKMLFile(InputSource inputSource, SAXParser saxParser) {
+	private static void readKMLFile(SAXParser saxParser) {
 		KMLFileReader leitor = new KMLFileReader(saxParser, inputSource);
 		ArrayList<Municipio> municipios = leitor.loadCounties();
-		System.out.println("Número de municípios: "+ municipios.size());
-		Scanner scanner = new Scanner(System.in);
+		
+		scanner = new Scanner(System.in);
 		System.out.println("Digite o nome do município");
 		String nomeMunicipio = scanner.nextLine();
+		
 		ArrayList<Municipio> listaMunicipios = new ArrayList<Municipio>();
 		for(Municipio municipio: municipios) {
 			if(municipio.getNome().toLowerCase().equalsIgnoreCase(nomeMunicipio)) {
@@ -122,20 +124,24 @@ public class Main {
 		
 		if(municipioSelecionado != null) {
 			municipioSelecionado.setBoundingBox(municipioSelecionado.calculaBoundingBox());
-			Path path = Paths.get("D:\\"+municipioSelecionado.getNome()+"_"+municipioSelecionado.getCodigoIBGE()+".osm");
-			FileManager fileManager = null;
-			fileManager = new FileManager();
+			
+			Path path = Paths.get("//home//gabriel//"+municipioSelecionado.getNome()+"_"+municipioSelecionado.getCodigoIBGE()+".osm");
+			
+			FileManager fileManager = new FileManager();
+			
 			OSMFileDownloader fileDownloader = null;
+			
 			try {
-				fileDownloader = new OSMFileDownloader(fileManager,path,setUrl(municipioSelecionado).openStream());
+				inputStream = setUrl(municipioSelecionado).openStream();
+				fileDownloader = new OSMFileDownloader(fileManager, path, inputStream);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			
 			fileDownloader.downloadFile();
 			
 			file = path.toFile();
 			try {
-				inputStream = null;
 				configFile();
 			} catch (FileNotFoundException | UnsupportedEncodingException e) {
 				e.printStackTrace();
