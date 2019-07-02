@@ -25,7 +25,11 @@ public class OSMFileWriter implements IOSMFileWriter {
 	private InputSource inputSource;
 	
 	private List<String> resultantFile = new ArrayList<String>();
+<<<<<<< HEAD
 	private final Path path = Paths.get("c:\\xml\\resultadoFiltragemOSM.txt");
+=======
+	private final Path path = Paths.get("D:\\Resultado.txt");
+>>>>>>> 32888036c960c53bf91aa8ac83ee24c8fec5e9a5
 	
 	public OSMFileWriter(SAXParser saxParser, InputSource inputSource) {
 		this.saxParser = saxParser;

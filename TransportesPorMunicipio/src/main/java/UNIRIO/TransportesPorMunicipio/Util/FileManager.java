@@ -12,9 +12,9 @@ import java.util.List;
 
 public class FileManager {
 	
-	private FileOutputStream fileOutputStream;
-	
-	public FileManager(FileOutputStream fileOutputStream) { this.fileOutputStream = fileOutputStream; }	
+	public FileManager() {
+		
+	}	
 	
 	/**
 	 * Função que cria um arquivo a partir de um caminho + extensão e um conteúdo em uma lista de Strings
@@ -40,7 +40,8 @@ public class FileManager {
 			System.out.println("Arquivo já em cache");
 		} else {
 			try {
-				//qileOutputStream = new FileOutputStream(new File(path.toString()));
+				System.out.println("Fazendo download do arquivo. Pode demorar dependendo do município");
+				FileOutputStream fileOutputStream = new FileOutputStream(new File(path.toString()));
 				int bytes = 0;
 				while((bytes = content.read()) != -1) {
 					fileOutputStream.write(bytes);
