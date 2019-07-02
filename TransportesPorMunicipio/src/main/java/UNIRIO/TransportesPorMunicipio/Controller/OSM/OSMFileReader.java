@@ -36,6 +36,11 @@ public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 		} 
 	}	
 	
+	/***
+	 * Método chamado pelo handler toda vez que uma tag é encontrada
+	 * @params uri, localName, tagName, attrs
+	 * @authors Gabriel Nogueira, Jonathan Santos e Paulo Henrique
+	 */
 	@Override
 	public void startElement(String uri, String localName, String tagName, Attributes attrs) throws SAXException {					
 		if (tagName.equalsIgnoreCase("way") || tagName.equalsIgnoreCase("relation")) {
@@ -61,7 +66,13 @@ public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 		}
 		return false;
 	}
-
+	
+	/***
+	 * Método para detectar rodovias, portos, aeroportos e ferrovias do arquivo OSM
+	 * @param attributes
+	 * @param node
+	 * @authors Gabriel Nogueira, Jonathan Santos e Paulo Henrique
+	 */
 	private NoStreetMap nodeWithAttributes(Attributes attributes, NoStreetMap node) {
 		if (attributes.getValue("k").equalsIgnoreCase(Node.AEROPORTO.type) && attributes.getValue("v").equalsIgnoreCase(Node.AEROPORTO.value)) {
 			System.out.println("Aeroporto detectado");

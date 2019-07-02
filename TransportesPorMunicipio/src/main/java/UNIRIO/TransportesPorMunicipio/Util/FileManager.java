@@ -16,11 +16,11 @@ public class FileManager {
 		
 	}	
 	
-	/**
-	 * Função que cria um arquivo a partir de um caminho + extensão e um conteúdo em uma lista de Strings
-	 * @param destino Caminho, nome e extensão do arquivo que será criado
-	 * @param conteudo Conteúdo do arquivo a ser criado
-	 * @author Jow
+	/***
+	 * Método para criar uma arquivo
+	 * @authors Gabriel Nogueira, Jonathan Santos e Paulo Henrique
+	 * @param path
+	 * @param fileContent
 	 */
 	public void createFile(Path path, List<String> fileContent) {
 		try {
@@ -29,11 +29,11 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Função que cria um arquivo a partir de um caminho + extensão e um conteúdo em um InputStream
-	 * @param destino Caminho, nome e extensão do arquivo que será criado
-	 * @param conteudo Conteúdo do arquivo a ser criado
-	 * @author Jow
+	
+	/***
+	 * Método para realizar o download de um arquivo osm baseado no content e salva no path especificado
+	 * @param path
+	 * @param content
 	 */
 	public void downloadFile(Path path, InputStream content) {
 		if(alreadyExistsFile(path)) {
@@ -58,7 +58,7 @@ public class FileManager {
 	}
 	
 	/**
-	 * Função utilitária com objetivo de verificar se um arquivo já existe.
+	 * Método utilitário com objetivo de verificar se um arquivo já existe.
 	 * @param Caminho, nome e extensão do arquivo que será checado
 	 * @author Jow
 	 * @return

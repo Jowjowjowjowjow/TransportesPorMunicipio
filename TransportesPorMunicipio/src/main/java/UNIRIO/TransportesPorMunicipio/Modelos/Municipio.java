@@ -38,9 +38,9 @@ public class Municipio {
 	}
 	
 	/**
-	 * Função com função de calcular a Bounding Box de um município
-	 * @author Jow
-	 * @param municipio Município que terá a Bounding Box calculada
+	 * Método para calcular a Bounding Box de um município
+	 * @author Gabriel Nogueira, Jonathan Santos e Paulo Henrique
+	 * @param municipio que terá a Bounding Box calculada
 	 * @return BoundingBox do município
 	 */
 	public BoundingBox calculaBoundingBox(){

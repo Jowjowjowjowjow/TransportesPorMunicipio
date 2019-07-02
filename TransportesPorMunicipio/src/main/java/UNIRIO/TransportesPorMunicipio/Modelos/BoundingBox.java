@@ -14,8 +14,8 @@ public class BoundingBox {
 	}
 
 	/**
-	 * Função com o objetivo de retornar a Bounding Box em forma de String
-	 * @author Jow
+	 * Método para retornar a Bounding Box em forma de String
+	 * @author Gabriel Nogueira, Jonathan Santos e Paulo Henrique
 	 * @return Maior/Menor Latitude/Longitude
 	 */
 	public String exibeBoundingBox() {

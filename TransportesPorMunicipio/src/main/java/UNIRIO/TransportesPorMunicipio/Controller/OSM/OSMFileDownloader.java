@@ -28,9 +28,8 @@ public class OSMFileDownloader {
 	}
 	
 	/**
-	 * Função com o objetivo de criar a url com a boundingBox do município, chamar a API do openStreetMap com a bounding box do município correspondente
-	 * e fazer o download do arquivo osm resultante
-	 * @param municipio Município que será baixado
+	 * Método responsável por fazer downloads de arquivos
+	 * @param filepath
 	 * @author Jow
 	 */
 	public void downloadFile() {
