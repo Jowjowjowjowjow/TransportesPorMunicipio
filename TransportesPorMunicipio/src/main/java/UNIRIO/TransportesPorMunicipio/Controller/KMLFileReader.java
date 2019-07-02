@@ -51,7 +51,12 @@ public class KMLFileReader extends DefaultHandler implements ISAXHandler {
 		setCurrentFlag(tagName, attributos);
 	}
 	
-
+	/***
+	 * Método para definir tag atual dentro do arquivo KML.
+	 * @param nomeDaTag
+	 * @param attributos
+	 * @authors Gabriel Nogueira, Jonathan Santos e Paulo Henrique
+	 */
 	private void setCurrentFlag(String nomeDaTag, Attributes attributos) {
 		/** Flag para a tag de SimpleData e diferenciar nome do município do código do município */
 		if (nomeDaTag.equalsIgnoreCase(Tag.SIMPLE_DATA.value)) {
@@ -101,7 +106,11 @@ public class KMLFileReader extends DefaultHandler implements ISAXHandler {
 			placemarkTag = false;
 		}
 	}
-
+	
+	/***
+	 * Método para definir todas as coordenadas de um polígono
+	 * @param tagValue
+	 */
 	private void setCoordinatesList(StringBuffer tagValue) {
 		String[] listaDeCoordenadas;
 		/* Dividindo a string de coordenadasTag utilizando ',0' como separador */
