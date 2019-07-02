@@ -1,12 +1,8 @@
 package UNIRIO.TransportesPorMunicipio.Controller.OSM;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 
-import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Util.FileManager;
 
 /** 
@@ -21,13 +17,13 @@ import UNIRIO.TransportesPorMunicipio.Util.FileManager;
 
 public class OSMFileDownloader {
 
-	private Municipio municipio;
+	private InputStream is;
 	private FileManager fileManager;
 	private Path filePath;
 	
-	public OSMFileDownloader(Municipio municipio, FileManager fileManager, Path filePath) {
+	public OSMFileDownloader(FileManager fileManager, Path filePath, InputStream is) {
+		this.is = is;
 		this.fileManager = fileManager;
-		this.municipio = municipio;
 		this.filePath = filePath;
 	}
 	
@@ -38,26 +34,8 @@ public class OSMFileDownloader {
 	 * @author Jow
 	 */
 	public void downloadFile() {
-		try {
-		     InputStream is = setUrl().openStream();
-		     fileManager.downloadFile(filePath, is);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		fileManager.downloadFile(filePath, is);
 	}
 	
-	private URL setUrl() {
-		try {
-			return new URL("https://overpass-api.de/api/map?" + 
-					"bbox=" + 
-					municipio.getBoundingBox().getMenorLongitude( ) +
-					"," + municipio.getBoundingBox().getMenorLatitude() + 
-					"," + municipio.getBoundingBox().getMaiorLongitude() + 
-					"," + municipio.getBoundingBox().getMaiorLatitude());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 	
 }
