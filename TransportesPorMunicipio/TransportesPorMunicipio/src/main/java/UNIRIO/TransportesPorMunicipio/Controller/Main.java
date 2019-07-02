@@ -1,7 +1,5 @@
 package UNIRIO.TransportesPorMunicipio.Controller;
 
-<<<<<<< HEAD
-=======
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,57 +7,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
->>>>>>> d7bdc06b27fa61fa9223e3f01c03c11bf767749d
 import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
 
-<<<<<<< HEAD
-import UNIRIO.TransportesPorMunicipio.Modelos.BoundingBox;
-import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
-=======
 import org.xml.sax.InputSource;
 
 import UNIRIO.TransportesPorMunicipio.Controller.OSM.OSMFileWriter;
 import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Util.SAXManager;
->>>>>>> d7bdc06b27fa61fa9223e3f01c03c11bf767749d
 
 
 public class Main {
 
-<<<<<<< HEAD
-	public static void main(String[] args) {
-
-		SAXManager saxManager = new SAXManager();
-		SAXParser parser = saxManager.getSaxParser();
-
-		FileWriter fileWriter = new FileWriter(parser);
-		KMLWriter kmlWriter = new KMLWriter(parser);
-		fileWriter.initializeRead();
-		fileWriter.initializeRead();
-				
-	/*	ArrayList<Municipio> municipios = LeitorDeArquivosKML.carregaMunicipios();
-		ArrayList<String> conteudoArquivoBoundingBox = new ArrayList<String>();
-		for(Municipio municipio: municipios) {
-			municipio.setBoundingBox(BoundingBox.calculaBoundingBox(municipio));
-			System.out.println("Nome: " + municipio.getNome());
-			conteudoArquivoBoundingBox.add("Nome: " + municipio.getNome());
-			System.out.println("Codigo: " + municipio.getCodigoIBGE());
-			conteudoArquivoBoundingBox.add("Codigo: " + municipio.getCodigoIBGE());
-			System.out.println("Quantidade de polígonos: " + municipio.getPoligonos().size());
-			conteudoArquivoBoundingBox.add("Quantidade de polígonos: " + municipio.getPoligonos().size());
-			System.out.println("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");
-			conteudoArquivoBoundingBox.add("Bounding Box: " + municipio.getBoundingBox().exibeBoundingBox() +"\n");		
-			Utilitarios.criaEEscreveArquivo("D:\\ResultadoBoundingBox.txt", conteudoArquivoBoundingBox);
-		}
-	*/	
-	/*	for(Municipio municipio: municipios) {
-			if(municipio.getNome().equalsIgnoreCase("Rio de Janeiro")) {
-				BaixaArquivoOSM.BaixaArquivo(municipio);
-			}
-		}*/
-=======
 	private static File file;
 	private static Reader reader;
 	private static InputSource inputSource;
@@ -73,12 +33,12 @@ public class Main {
 		SAXParser saxParser = saxManager.getSaxParser();
 		
 		if(!alreadyHasOSMFile) {
-			file = new File("//home//gabriel//municipiosrj.kml");
+			file = new File("c://xml//municipiosbr.kml");
 			configFile();
 			readKMLFile(inputSource, saxParser);
 			
 		} else {
-			file = new File("//home//gabriel//municipio.osm");
+			file = new File("c://xml//municipio.osm");
 			configFile();
 			readOSMFile(inputSource, saxParser);
 		}
@@ -121,6 +81,5 @@ public class Main {
 //				BaixaArquivoOSM.BaixaArquivo(municipio);
 			//}
 		//}
->>>>>>> d7bdc06b27fa61fa9223e3f01c03c11bf767749d
 	}
 }

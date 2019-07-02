@@ -1,4 +1,4 @@
-package UNIRIO.TransportesPorMunicipio.Controller;
+package UNIRIO.TransportesPorMunicipio.Controller.OSM;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -10,27 +10,29 @@ import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 
-import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
+import org.xml.sax.InputSource;
+
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 
-public class FileWriter implements IFileWriter {
+public class OSMFileWriter implements IOSMFileWriter {
 	
-	private LeitorDeArquivosOSM reader;
+	private OSMFileReader reader;
 	private SAXParser saxParser;
+	private InputSource inputSource;
 	
 	private List<String> resultantFile = new ArrayList<String>();
-	private final Path path = Paths.get("c:\\xml\\resultadoFiltragemOSM.txt");
+	private final Path path = Paths.get("c://xml//bla.txt");
 	
-	public FileWriter(SAXParser saxParser) {
+	public OSMFileWriter(SAXParser saxParser, InputSource inputSource) {
 		this.saxParser = saxParser;
+		this.inputSource = inputSource;
 	}
 	
 	@Override
 	public void initializeRead() {		
-		reader = new LeitorDeArquivosOSM(saxParser, this);
-		reader.carregaLocais();
+		reader = new OSMFileReader(saxParser, this, inputSource);
+		reader.loadLocals();
 	}	
-	
 	
 	@Override
 	public void addLine(NoStreetMap node) {
@@ -46,13 +48,5 @@ public class FileWriter implements IFileWriter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	@Override
-	public void addLineKML(Municipio municipio) {
-	
-	}
-
-	
-	
+	}	
 }

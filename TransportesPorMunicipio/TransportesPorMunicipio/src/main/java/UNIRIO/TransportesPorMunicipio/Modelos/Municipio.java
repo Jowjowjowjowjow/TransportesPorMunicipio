@@ -9,24 +9,9 @@ public class Municipio {
 	private ArrayList<Poligono> poligonos = new ArrayList<Poligono>();
 	private BoundingBox boundingBox;
 	
-	
-	
-	public Municipio(String nome, int codigoIBGE, ArrayList<Poligono> poligonos, BoundingBox boundingBox) {
-		super();
-		this.nome = nome;
-		this.codigoIBGE = codigoIBGE;
-		this.poligonos = poligonos;
-		this.boundingBox = boundingBox;
-	}
-	
-	public Municipio() {}
-
-
 	public void addPoligono(Poligono poligono) {
 		this.poligonos.add(poligono);
 	}
-	
-	
 	public ArrayList<Poligono> getPoligonos() {
 		return poligonos;
 	}

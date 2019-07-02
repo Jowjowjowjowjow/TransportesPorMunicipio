@@ -1,6 +1,6 @@
 package UNIRIO.TransportesPorMunicipio.Modelos;
 
-public enum TipoNo {
+public enum Node {
 
 	AEROPORTO("aeroway", "aerodrome"),
 	PORTO("landuse", "harbour"),
@@ -10,7 +10,7 @@ public enum TipoNo {
 	public final String value;
 	public final String type;
 	
-	private TipoNo(String type,String value) {
+	private Node(String type,String value) {
 		this.value = value;
 		this.type = type;
 	}
