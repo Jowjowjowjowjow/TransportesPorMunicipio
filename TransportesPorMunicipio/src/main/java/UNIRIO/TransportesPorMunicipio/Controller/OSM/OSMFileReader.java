@@ -53,6 +53,10 @@ public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 		}
 	}
 	
+	public void endDocument () throws SAXException {
+		System.out.println("Fim da leitura do arquivo, verifique o arquivo de saída no path especificado");
+	}
+	
 	private boolean nodeExistsOnList(NoStreetMap streeMapNode) {
 		for(NoStreetMap node: nosStreetMap) {
 			if(node.getNome().equalsIgnoreCase(streeMapNode.getNome()) && node.getTipo() == streeMapNode.getTipo()) {
