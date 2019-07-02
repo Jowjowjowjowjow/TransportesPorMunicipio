@@ -26,12 +26,12 @@ public class BoundingBox {
 	}
 	
 	/**
-	 * Função estática com função de calcular a Bounding Box de um município
+	 * Função com função de calcular a Bounding Box de um município
 	 * @author Jow
 	 * @param municipio Município que terá a Bounding Box calculada
 	 * @return BoundingBox do município
 	 */
-	public static BoundingBox calculaBoundingBox(Municipio municipio){
+	public BoundingBox calculaBoundingBox(Municipio municipio){
 		double maiorLatitude = Double.NEGATIVE_INFINITY;
 		double menorLatitude = Double.MAX_VALUE;
 		double maiorLongitude = Double.NEGATIVE_INFINITY;
@@ -98,9 +98,4 @@ public class BoundingBox {
 	public void setMaiorLongitude(double maiorLongitude) {
 		this.maiorLongitude = maiorLongitude;
 	}
-	
-	
-	
-	
-	
 }

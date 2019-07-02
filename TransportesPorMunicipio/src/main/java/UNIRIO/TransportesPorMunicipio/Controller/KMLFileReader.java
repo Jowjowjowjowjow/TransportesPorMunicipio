@@ -10,8 +10,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import UNIRIO.TransportesPorMunicipio.Modelos.Coordenada;
 import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
 import UNIRIO.TransportesPorMunicipio.Modelos.Poligono;
-import UNIRIO.TransportesPorMunicipio.Modelos.ISAXHandler;
 import UNIRIO.TransportesPorMunicipio.Modelos.Tag;
+import UNIRIO.TransportesPorMunicipio.Util.ISAXHandler;
 
 public class KMLFileReader extends DefaultHandler implements ISAXHandler {
 
@@ -91,7 +91,8 @@ public class KMLFileReader extends DefaultHandler implements ISAXHandler {
 			countyCodeTag = false;
 		}
 
-		if (coordinateTag) setCoordinatesList(tagValue);
+		if (coordinateTag) 
+			setCoordinatesList(tagValue);
 
 		if (placemarkTag) {
 			if (county != null) {

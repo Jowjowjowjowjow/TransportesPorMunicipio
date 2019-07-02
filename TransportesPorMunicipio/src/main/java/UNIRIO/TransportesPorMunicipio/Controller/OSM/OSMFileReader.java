@@ -1,4 +1,4 @@
-package UNIRIO.TransportesPorMunicipio.Controller;
+package UNIRIO.TransportesPorMunicipio.Controller.OSM;
 
 import java.util.ArrayList;
 
@@ -8,19 +8,19 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import UNIRIO.TransportesPorMunicipio.Modelos.ISAXHandler;
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
-import UNIRIO.TransportesPorMunicipio.Modelos.TipoNo;
+import UNIRIO.TransportesPorMunicipio.Modelos.Node;
+import UNIRIO.TransportesPorMunicipio.Util.ISAXHandler;
 
 public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 	
 	private ArrayList<NoStreetMap> nosStreetMap = new ArrayList<NoStreetMap>();	
 	private NoStreetMap streetMapNode = new NoStreetMap();	
-	private IFileWriter fileWriter;
+	private IOSMFileWriter fileWriter;
 	private SAXParser saxParser;
 	private InputSource inputSource;
 	
-	public OSMFileReader(SAXParser saxParser, IFileWriter fileWriter, InputSource inputSource) {
+	public OSMFileReader(SAXParser saxParser, IOSMFileWriter fileWriter, InputSource inputSource) {
 		this.saxParser = saxParser;
 		this.fileWriter = fileWriter;
 		this.inputSource = inputSource;
@@ -43,7 +43,9 @@ public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 				fileWriter.addLine(streetMapNode);
 				nosStreetMap.add(streetMapNode);
 			}
-			streetMapNode = new NoStreetMap();
+			
+			if (streetMapNode != null)
+				streetMapNode = new NoStreetMap();
 		}
 		
 		if (tagName.equalsIgnoreCase("tag")) {	
@@ -61,18 +63,18 @@ public class OSMFileReader extends DefaultHandler implements ISAXHandler {
 	}
 
 	private NoStreetMap nodeWithAttributes(Attributes attributes, NoStreetMap node) {
-		if (attributes.getValue("k").equalsIgnoreCase(TipoNo.AEROPORTO.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.AEROPORTO.value)) {
+		if (attributes.getValue("k").equalsIgnoreCase(Node.AEROPORTO.type) && attributes.getValue("v").equalsIgnoreCase(Node.AEROPORTO.value)) {
 			System.out.println("Aeroporto detectado");
-			node.setTipo(TipoNo.AEROPORTO);
-		} else if (attributes.getValue("k").equalsIgnoreCase(TipoNo.PORTO.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.PORTO.value)) {
+			node.setTipo(Node.AEROPORTO);
+		} else if (attributes.getValue("k").equalsIgnoreCase(Node.PORTO.type) && attributes.getValue("v").equalsIgnoreCase(Node.PORTO.value)) {
 			System.out.println("Porto detectado");
-			node.setTipo(TipoNo.PORTO);
-		} else if (attributes.getValue("k").equalsIgnoreCase(TipoNo.RODOVIA.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.RODOVIA.value) ) {
+			node.setTipo(Node.PORTO);
+		} else if (attributes.getValue("k").equalsIgnoreCase(Node.RODOVIA.type) && attributes.getValue("v").equalsIgnoreCase(Node.RODOVIA.value) ) {
 			System.out.println("Rodovia detectada");
-			node.setTipo(TipoNo.RODOVIA);	
-		} else if (attributes.getValue("k").equalsIgnoreCase(TipoNo.FERROVIA.type) && attributes.getValue("v").equalsIgnoreCase(TipoNo.FERROVIA.value) ) {
+			node.setTipo(Node.RODOVIA);	
+		} else if (attributes.getValue("k").equalsIgnoreCase(Node.FERROVIA.type) && attributes.getValue("v").equalsIgnoreCase(Node.FERROVIA.value) ) {
 			System.out.println("Ferrovia detectada");
-			node.setTipo(TipoNo.FERROVIA);
+			node.setTipo(Node.FERROVIA);
 		}
 		
 		if (attributes.getValue("k").equalsIgnoreCase("name")) {

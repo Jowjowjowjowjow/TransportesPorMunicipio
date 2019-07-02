@@ -1,4 +1,4 @@
-package UNIRIO.TransportesPorMunicipio.Controller;
+package UNIRIO.TransportesPorMunicipio.Controller.OSM;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -14,7 +14,7 @@ import org.xml.sax.InputSource;
 
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 
-public class FileWriter implements IFileWriter {
+public class OSMFileWriter implements IOSMFileWriter {
 	
 	private OSMFileReader reader;
 	private SAXParser saxParser;
@@ -23,7 +23,7 @@ public class FileWriter implements IFileWriter {
 	private List<String> resultantFile = new ArrayList<String>();
 	private final Path path = Paths.get("//home//gabriel//bla.txt");
 	
-	public FileWriter(SAXParser saxParser, InputSource inputSource) {
+	public OSMFileWriter(SAXParser saxParser, InputSource inputSource) {
 		this.saxParser = saxParser;
 		this.inputSource = inputSource;
 	}
@@ -48,6 +48,5 @@ public class FileWriter implements IFileWriter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 }

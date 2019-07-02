@@ -3,9 +3,9 @@ package UNIRIO.TransportesPorMunicipio.Modelos;
 public class NoStreetMap {
 
 	String nome = null;
-	TipoNo tipo = null;
+	Node tipo = null;
 	
-	NoStreetMap(String nome, TipoNo tipo){
+	NoStreetMap(String nome, Node tipo){
 		this.nome = nome;
 		this.tipo = tipo;
 	}
@@ -19,10 +19,10 @@ public class NoStreetMap {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public TipoNo getTipo() {
+	public Node getTipo() {
 		return tipo;
 	}
-	public void setTipo(TipoNo tipo) {
+	public void setTipo(Node tipo) {
 		this.tipo = tipo;
 	}
 	

@@ -1,9 +1,9 @@
-package UNIRIO.TransportesPorMunicipio.Controller;
+package UNIRIO.TransportesPorMunicipio.Controller.OSM;
 
 import UNIRIO.TransportesPorMunicipio.Modelos.NoStreetMap;
 
-public interface IFileWriter {
+public interface IOSMFileWriter {
 	void initializeRead();
-	void writeFile();
 	void addLine(NoStreetMap node);
+	void writeFile();
 }

@@ -1,4 +1,4 @@
-package UNIRIO.TransportesPorMunicipio.Controller;
+package UNIRIO.TransportesPorMunicipio.Util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,10 +8,13 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
-public class Utilitarios {
+public class FileManager {
+	
+	private FileOutputStream fileOutputStream;
+	
+	public FileManager(FileOutputStream fileOutputStream) { this.fileOutputStream = fileOutputStream; }	
 	
 	/**
 	 * Função que cria um arquivo a partir de um caminho + extensão e um conteúdo em uma lista de Strings
@@ -19,10 +22,9 @@ public class Utilitarios {
 	 * @param conteudo Conteúdo do arquivo a ser criado
 	 * @author Jow
 	 */
-	public static void criaEEscreveArquivo(String destino, List<String> conteudo) {
-		Path ArquivoDestino = Paths.get(destino);
+	public void createFile(Path path, List<String> fileContent) {
 		try {
-			Files.write(ArquivoDestino, conteudo, Charset.forName("UTF-8"));
+			Files.write(path, fileContent, Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -33,20 +35,19 @@ public class Utilitarios {
 	 * @param conteudo Conteúdo do arquivo a ser criado
 	 * @author Jow
 	 */
-	public static void criaBaixaEEscreveArquivo(String destino, InputStream conteudo) {
-		if(checaSeArquivoExiste(destino)) {
+	public void downloadFile(Path path, InputStream content) {
+		if(alreadyExistsFile(path)) {
 			System.out.println("Arquivo já em cache");
 		} else {
-			System.out.println("Arquivo não encontrado, Fazendo download");
 			try {
-				FileOutputStream fileOutput = new FileOutputStream(new File(destino));
+				//qileOutputStream = new FileOutputStream(new File(path.toString()));
 				int bytes = 0;
-				while((bytes = conteudo.read()) != -1) {
-					fileOutput.write(bytes);
-				}
+				while((bytes = content.read()) != -1) {
+					fileOutputStream.write(bytes);
+				}	
 			System.out.println("Download finalizado");
-			conteudo.close();
-			fileOutput.close();
+			content.close();
+			fileOutputStream.close();
 			} catch (FileNotFoundException e) {
 				System.out.println("Houve um problema no download: " + e.getMessage());
 			} catch (IOException e) {
@@ -54,15 +55,16 @@ public class Utilitarios {
 			}
 		}
 	}
+	
 	/**
 	 * Função utilitária com objetivo de verificar se um arquivo já existe.
 	 * @param Caminho, nome e extensão do arquivo que será checado
 	 * @author Jow
 	 * @return
 	 */
-	public static boolean checaSeArquivoExiste(String destino) {
-		File file = new File(destino);
-		System.out.println("Verificando se o arquivo " + destino + " já existe.");
+	private boolean alreadyExistsFile(Path path) {
+		File file = new File(path.toString());
+		System.out.println("Verificando se o arquivo " + path + " já existe.");
 		return file.exists();
 	}
 

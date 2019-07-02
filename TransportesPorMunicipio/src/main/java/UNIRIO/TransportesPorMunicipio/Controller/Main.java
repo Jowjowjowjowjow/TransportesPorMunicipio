@@ -13,7 +13,9 @@ import javax.xml.parsers.SAXParser;
 
 import org.xml.sax.InputSource;
 
+import UNIRIO.TransportesPorMunicipio.Controller.OSM.OSMFileWriter;
 import UNIRIO.TransportesPorMunicipio.Modelos.Municipio;
+import UNIRIO.TransportesPorMunicipio.Util.SAXManager;
 
 
 public class Main {
@@ -36,7 +38,7 @@ public class Main {
 			readKMLFile(inputSource, saxParser);
 			
 		} else {
-			file = new File("//home//gabriel//municipios.osm");
+			file = new File("//home//gabriel//municipio.osm");
 			configFile();
 			readOSMFile(inputSource, saxParser);
 		}
@@ -51,7 +53,7 @@ public class Main {
 	} 
 	
 	private static void readOSMFile(InputSource inputSource, SAXParser saxParser) {
-		FileWriter fileWriter = new FileWriter(saxParser, inputSource);
+		OSMFileWriter fileWriter = new OSMFileWriter(saxParser, inputSource);
 		fileWriter.initializeRead();
 	}
 	
