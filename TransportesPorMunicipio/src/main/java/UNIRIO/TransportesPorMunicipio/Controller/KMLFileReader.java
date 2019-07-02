@@ -105,7 +105,7 @@ public class KMLFileReader extends DefaultHandler implements ISAXHandler {
 	private void setCoordinatesList(StringBuffer tagValue) {
 		String[] listaDeCoordenadas;
 		/* Dividindo a string de coordenadasTag utilizando ',0' como separador */
-		listaDeCoordenadas = tagValue.toString().trim().split(",0");
+		listaDeCoordenadas = tagValue.toString().trim().split(",0 ");
 		for (int i = 0; i < listaDeCoordenadas.length; i++) {
 			/*
 			 * Dividindo uma única coordenada em Longitude e Latitude, CoordenadaXY[0] = Longitude e
